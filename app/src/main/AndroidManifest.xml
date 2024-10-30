@@ -2,7 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-<<<<<<< HEAD
     <!-- Indica que la cámara es una funcionalidad opcional -->
     <uses-feature
         android:name="android.hardware.camera"
@@ -13,9 +12,6 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
-    <!-- Aplicación -->
-=======
->>>>>>> e1cc0e856e0aa64f442571383c1bd37f4226fe7c
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -24,21 +20,15 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-<<<<<<< HEAD
         android:theme="@style/Theme.AlphaKid_v8"
         tools:targetApi="31"
         tools:replace="android:label">
 
         <!-- Actividad principal -->
-=======
-        android:theme="@style/Theme.AlphaKid"
-        tools:targetApi="31">
->>>>>>> e1cc0e856e0aa64f442571383c1bd37f4226fe7c
         <activity
-            android:name=".MainActivity"
+            android:name="com.example.alphakid_v8.MainActivity"
             android:exported="true"
             android:label="@string/app_name"
-<<<<<<< HEAD
             android:theme="@style/Theme.AlphaKid_v8"
             tools:ignore="MissingClass">
             <intent-filter>
@@ -46,23 +36,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ChallengeActivity" android:exported="true" />
-        <activity android:name=".CameraActivity" android:exported="true" />
-        <activity android:name=".SuccessActivity" android:exported="true" />
-        <activity android:name=".ErrorActivity" android:exported="true" />
+        <activity android:name="com.example.alphakid_v8.ChallengeActivity" android:exported="true" />
+        <activity android:name="com.example.alphakid_v8.CameraActivity" android:exported="true" />
+        <activity android:name="com.example.alphakid_v8.SuccessActivity" android:exported="true" />
+        <activity android:name="com.example.alphakid_v8.ErrorActivity" android:exported="true" />
 
     </application>
 
 </manifest>
-=======
-            android:theme="@style/Theme.AlphaKid">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-    </application>
-
-</manifest>
->>>>>>> e1cc0e856e0aa64f442571383c1bd37f4226fe7c

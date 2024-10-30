@@ -1,23 +1,23 @@
 -- Merging decision tree log ---
 manifest
-ADDED from C:\Users\pcr08\AndroidStudioProjects\AlphaKid_v8\opencv\sdk\java\AndroidManifest.xml:2:1-5:12
-INJECTED from C:\Users\pcr08\AndroidStudioProjects\AlphaKid_v8\opencv\sdk\java\AndroidManifest.xml:2:1-5:12
+ADDED from D:\Android_Studio\SolucionarErrores\opencv\sdk\java\AndroidManifest.xml:2:1-5:12
+INJECTED from D:\Android_Studio\SolucionarErrores\opencv\sdk\java\AndroidManifest.xml:2:1-5:12
 	package
-		ADDED from C:\Users\pcr08\AndroidStudioProjects\AlphaKid_v8\opencv\sdk\java\AndroidManifest.xml:3:7-27
-		INJECTED from C:\Users\pcr08\AndroidStudioProjects\AlphaKid_v8\opencv\sdk\java\AndroidManifest.xml
+		ADDED from D:\Android_Studio\SolucionarErrores\opencv\sdk\java\AndroidManifest.xml:3:7-27
+		INJECTED from D:\Android_Studio\SolucionarErrores\opencv\sdk\java\AndroidManifest.xml
 	xmlns:android
-		ADDED from C:\Users\pcr08\AndroidStudioProjects\AlphaKid_v8\opencv\sdk\java\AndroidManifest.xml:2:11-69
+		ADDED from D:\Android_Studio\SolucionarErrores\opencv\sdk\java\AndroidManifest.xml:2:11-69
 application
-ADDED from C:\Users\pcr08\AndroidStudioProjects\AlphaKid_v8\opencv\sdk\java\AndroidManifest.xml:4:7-72
+ADDED from D:\Android_Studio\SolucionarErrores\opencv\sdk\java\AndroidManifest.xml:4:7-72
 	android:label
-		ADDED from C:\Users\pcr08\AndroidStudioProjects\AlphaKid_v8\opencv\sdk\java\AndroidManifest.xml:4:47-69
+		ADDED from D:\Android_Studio\SolucionarErrores\opencv\sdk\java\AndroidManifest.xml:4:47-69
 	android:allowBackup
-		ADDED from C:\Users\pcr08\AndroidStudioProjects\AlphaKid_v8\opencv\sdk\java\AndroidManifest.xml:4:20-46
+		ADDED from D:\Android_Studio\SolucionarErrores\opencv\sdk\java\AndroidManifest.xml:4:20-46
 uses-sdk
-INJECTED from C:\Users\pcr08\AndroidStudioProjects\AlphaKid_v8\opencv\sdk\java\AndroidManifest.xml reason: use-sdk injection requested
-INJECTED from C:\Users\pcr08\AndroidStudioProjects\AlphaKid_v8\opencv\sdk\java\AndroidManifest.xml
-INJECTED from C:\Users\pcr08\AndroidStudioProjects\AlphaKid_v8\opencv\sdk\java\AndroidManifest.xml
+INJECTED from D:\Android_Studio\SolucionarErrores\opencv\sdk\java\AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from D:\Android_Studio\SolucionarErrores\opencv\sdk\java\AndroidManifest.xml
+INJECTED from D:\Android_Studio\SolucionarErrores\opencv\sdk\java\AndroidManifest.xml
 	android:targetSdkVersion
-		INJECTED from C:\Users\pcr08\AndroidStudioProjects\AlphaKid_v8\opencv\sdk\java\AndroidManifest.xml
+		INJECTED from D:\Android_Studio\SolucionarErrores\opencv\sdk\java\AndroidManifest.xml
 	android:minSdkVersion
-		INJECTED from C:\Users\pcr08\AndroidStudioProjects\AlphaKid_v8\opencv\sdk\java\AndroidManifest.xml
+		INJECTED from D:\Android_Studio\SolucionarErrores\opencv\sdk\java\AndroidManifest.xml

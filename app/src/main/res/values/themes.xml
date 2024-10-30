@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-<<<<<<< HEAD
     <style name="Theme.AlphaKid_v8" parent="Theme.AppCompat.Light.NoActionBar"/>
-=======
-
     <style name="Theme.AlphaKid" parent="android:Theme.Material.Light.NoActionBar" />
->>>>>>> e1cc0e856e0aa64f442571383c1bd37f4226fe7c
 </resources>
