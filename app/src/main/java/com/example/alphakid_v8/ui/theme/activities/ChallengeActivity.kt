@@ -8,19 +8,15 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
+import com.example.alphakid_v8.ui.theme.AlphaKid_v8Theme
 
 class ChallengeActivity : ComponentActivity() {
     private val requestPermissionLauncher = registerForActivityResult(
@@ -35,9 +31,10 @@ class ChallengeActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContent {
-            ChallengeScreen(onOpenCamera = { checkCameraPermission() })
+            AlphaKid_v8Theme {
+                ChallengeScreen(onOpenCamera = { checkCameraPermission() })
+            }
         }
     }
 
@@ -68,7 +65,9 @@ class ChallengeActivity : ComponentActivity() {
 @Composable
 fun ChallengeScreen(onOpenCamera: () -> Unit) {
     Column(
-        modifier = Modifier.fillMaxSize().padding(16.dp),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
