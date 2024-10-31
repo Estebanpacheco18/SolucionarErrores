@@ -1,4 +1,4 @@
-package com.example.alphakid_v8
+package com.example.alphakid_v8.ui.theme.activities
 
 import android.Manifest
 import android.content.Intent

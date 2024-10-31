@@ -22,7 +22,7 @@
         tools:replace="android:label">
 
         <activity
-            android:name="com.example.alphakid_v8.MainActivity"
+            android:name="com.example.alphakid_v8.ui.theme.activities.MainActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.AlphaKid_v8"
@@ -32,10 +32,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.example.alphakid_v8.ChallengeActivity" android:exported="true" />
-        <activity android:name="com.example.alphakid_v8.CameraActivity" android:exported="true" />
-        <activity android:name="com.example.alphakid_v8.SuccessActivity" android:exported="true" />
-        <activity android:name="com.example.alphakid_v8.ErrorActivity" android:exported="true" />
+        <activity android:name="com.example.alphakid_v8.ui.theme.activities.ChallengeActivity" android:exported="true" />
+        <activity android:name="com.example.alphakid_v8.ui.theme.activities.CameraActivity" android:exported="true" />
+        <activity android:name="com.example.alphakid_v8.ui.theme.activities.SuccessActivity" android:exported="true" />
+        <activity android:name="com.example.alphakid_v8.ui.theme.activities.ErrorActivity" android:exported="true" />
 
     </application>
 </manifest>
