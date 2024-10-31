@@ -1,4 +1,4 @@
-package com.example.alphakid_v8.ui.theme.activities
+package com.example.alphakid_v8.ui.activities
 
 import android.content.Intent
 import android.os.Bundle
@@ -9,38 +9,50 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import com.example.alphakid_v8.ui.theme.AlphaKid_v8Theme
+import com.example.alphakid_v8.ui.theme.activities.ChallengeActivity
+import android.content.Context
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        try {
-            setContent {
-                CountdownScreen { navigateToChallenge() }
+        setContent {
+            AlphaKid_v8Theme {
+                MainScreen()
             }
-        } catch (e: Exception) {
-            Log.e("MainActivity", "Error during navigation", e)
         }
     }
 
-    private fun navigateToChallenge() {
+    fun navigateToChallenge() {
         try {
             val intent = Intent(this, ChallengeActivity::class.java)
             startActivity(intent)
-            finish()  // Opcional: evita que el usuario vuelva atrás con el botón de atrás
+            finish()  // Optional: prevents the user from going back with the back button
         } catch (e: Exception) {
             Log.e("MainActivity", "Failed to navigate to ChallengeActivity", e)
         }
+    }
+}
+
+@Composable
+fun MainScreen() {
+    val context = LocalContext.current
+    val sharedPreferences = context.getSharedPreferences("guest_profile", Context.MODE_PRIVATE)
+    val guestName = remember { sharedPreferences.getString("guest_name", "Guest") }
+
+    CountdownScreen(onFinish = { (context as MainActivity).navigateToChallenge() })
+
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.TopCenter
+    ) {
+        Text(text = "Welcome, $guestName!")
     }
 }
 
