@@ -1,5 +1,6 @@
 package com.example.alphakid_v8.ui.activities
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
@@ -17,7 +18,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.example.alphakid_v8.ui.theme.AlphaKid_v8Theme
 import com.example.alphakid_v8.ui.theme.activities.ChallengeActivity
-import android.content.Context
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,8 +43,8 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MainScreen() {
     val context = LocalContext.current
-    val sharedPreferences = context.getSharedPreferences("guest_profile", Context.MODE_PRIVATE)
-    val guestName = remember { sharedPreferences.getString("guest_name", "Guest") }
+    val sharedPreferences = context.getSharedPreferences("user_profile", Context.MODE_PRIVATE)
+    val userName = remember { sharedPreferences.getString("user_name", "User") }
 
     CountdownScreen(onFinish = { (context as MainActivity).navigateToChallenge() })
 
@@ -52,13 +52,13 @@ fun MainScreen() {
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.TopCenter
     ) {
-        Text(text = "Welcome, $guestName!")
+        Text(text = "Welcome, $userName!")
     }
 }
 
 @Composable
 fun CountdownScreen(onFinish: () -> Unit) {
-    var countdown by remember { mutableStateOf(3) }
+    var countdown by remember { mutableIntStateOf(3) }
 
     LaunchedEffect(Unit) {
         object : CountDownTimer(4000, 1000) {

@@ -1,4 +1,4 @@
-package com.example.alphakid_v8.ui.theme.activities
+package com.example.alphakid_v8.ui.activities
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -18,6 +18,7 @@ import com.example.alphakid_v8.R
 import com.example.alphakid_v8.ui.theme.AlphaKid_v8Theme
 import com.example.alphakid_v8.ui.theme.BackgroundColor
 import com.example.alphakid_v8.ui.theme.PrimaryColor
+import com.example.alphakid_v8.ui.theme.activities.NameRegistrationActivity
 
 @SuppressLint("CustomSplashScreen")
 class SplashActivity : ComponentActivity() {
@@ -29,9 +30,9 @@ class SplashActivity : ComponentActivity() {
             }
         }
 
-        // Delay for 3 seconds and then navigate to LoginActivity
+        // Delay for 3 seconds and then navigate to NameRegistrationActivity
         android.os.Handler(android.os.Looper.getMainLooper()).postDelayed({
-            startActivity(Intent(this, LoginActivity::class.java))
+            startActivity(Intent(this, NameRegistrationActivity::class.java))
             finish()
         }, 3000) // 3000 milliseconds = 3 seconds
     }
