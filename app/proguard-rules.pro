@@ -19,3 +19,14 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+# Keep Compose classes
+-keep class androidx.compose.** { *; }
+-keep class kotlin.** { *; }
+-keep class kotlinx.** { *; }
+
+# Keep Tesseract classes
+-keep class net.sourceforge.tess4j.** { *; }
+
+# Keep OpenCV classes
+-keep class org.opencv.** { *; }

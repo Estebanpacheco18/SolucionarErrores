@@ -1,10 +1,13 @@
 package com.example.alphakid_v8
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -17,18 +20,38 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-
+import androidx.core.content.ContextCompat
 
 class ChallengeActivity : ComponentActivity() {
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted: Boolean ->
+        if (isGranted) {
+            openCamera()
+        } else {
+            Log.e("ChallengeActivity", "Camera permission denied")
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        try {
-            setContent {
-                ChallengeScreen(onOpenCamera = { openCamera() })
+        setContent {
+            ChallengeScreen(onOpenCamera = { checkCameraPermission() })
+        }
+    }
+
+    private fun checkCameraPermission() {
+        when {
+            ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.CAMERA
+            ) == PackageManager.PERMISSION_GRANTED -> {
+                openCamera()
             }
-        } catch (e: Exception) {
-            Log.e("ChallengeActivity", "Error setting content", e)
+            else -> {
+                requestPermissionLauncher.launch(Manifest.permission.CAMERA)
+            }
         }
     }
 

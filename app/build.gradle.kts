@@ -59,7 +59,13 @@ android {
 dependencies {
     implementation("net.sourceforge.tess4j:tess4j:5.13.0")
     implementation(project(":opencv"))  // OpenCV como módulo
-
+    implementation ("androidx.compose.ui:ui:1.6.0")
+    implementation ("androidx.compose.material3:material3:1.2.0")
+    implementation ("androidx.compose.ui:ui-tooling-preview:1.6.0")
+    implementation ("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
+    implementation ("androidx.activity:activity-compose:1.8.0")
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
