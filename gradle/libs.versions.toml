@@ -14,9 +14,6 @@ navigationCompose = "2.8.1"
 navigationRuntimeKtxVersion = "2.8.3"
 navigationComposeVersion = "2.8.3"
 material = "1.12.0"
-visionCommon = "17.3.0"
-playServicesMlkitTextRecognitionCommon = "19.1.0"
-playServicesMlkitTextRecognition = "19.0.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -39,9 +36,6 @@ androidx-navigation-compose = { group = "androidx.navigation", name = "navigatio
 navigation-runtime-ktx = { group = "androidx.navigation", name = "navigation-runtime-ktx", version.ref = "navigationRuntimeKtxVersion" }
 navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationComposeVersion" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
-vision-common = { group = "com.google.mlkit", name = "vision-common", version.ref = "visionCommon" }
-play-services-mlkit-text-recognition-common = { group = "com.google.android.gms", name = "play-services-mlkit-text-recognition-common", version.ref = "playServicesMlkitTextRecognitionCommon" }
-play-services-mlkit-text-recognition = { group = "com.google.android.gms", name = "play-services-mlkit-text-recognition", version.ref = "playServicesMlkitTextRecognition" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
