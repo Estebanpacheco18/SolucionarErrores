@@ -6,22 +6,32 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.opengl.GLES20
-import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
-import android.view.ViewGroup
-import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
-import androidx.annotation.RequiresApi
-import androidx.appcompat.app.AppCompatActivity
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.example.alphakid_v8.R
 import com.example.alphakid_v8.data.models.repositories.RewardSystem
+import com.example.alphakid_v8.ui.theme.AlphaKid_v8Theme
+import com.example.alphakid_v8.ui.theme.PrimaryColor
+import com.google.mlkit.vision.common.InputImage
+import com.google.mlkit.vision.text.TextRecognition
+import com.google.mlkit.vision.text.latin.TextRecognizerOptions
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -30,15 +40,15 @@ import org.opencv.android.Utils
 import org.opencv.core.Mat
 import org.opencv.core.Size
 import org.opencv.imgproc.Imgproc
+import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
 
-class CameraActivity : AppCompatActivity() {
-
-    private lateinit var resultMessage: TextView
-    private val rewardSystem = RewardSystem()
+class CameraActivity : ComponentActivity() {
+    private lateinit var rewardSystem: RewardSystem
     private val CAMERA_REQUEST_CODE = 100
+    private lateinit var resultMessage: MutableState<String>
 
-    @RequiresApi(Build.VERSION_CODES.M)
-    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -49,38 +59,18 @@ class CameraActivity : AppCompatActivity() {
         }
 
         checkOpenGLVersion()
-        setupUI()
-    }
 
-    @RequiresApi(Build.VERSION_CODES.M)
-    private fun setupUI() {
-        val layout = LinearLayout(this).apply {
-            orientation = LinearLayout.VERTICAL
-            layoutParams = ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT
-            )
-        }
+        resultMessage = mutableStateOf("")
+        rewardSystem = RewardSystem(this)
 
-        resultMessage = TextView(this).apply {
-            textSize = 24f
-            setTextColor(resources.getColor(android.R.color.black, null))
-            layoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-            ).apply {
-                setMargins(16, 16, 16, 16)
+        setContent {
+            AlphaKid_v8Theme {
+                CameraScreen(
+                    onOpenCamera = { openCamera() },
+                    resultMessage = resultMessage
+                )
             }
         }
-        layout.addView(resultMessage)
-
-        val captureButton = Button(this).apply {
-            text = "Abrir Cámara"
-            setOnClickListener { openCamera() }
-        }
-        layout.addView(captureButton)
-
-        setContentView(layout)
     }
 
     private fun checkOpenGLVersion() {
@@ -104,81 +94,139 @@ class CameraActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == CAMERA_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            resultMessage.value = "Procesando imagen..."
             val imageBitmap = data?.extras?.get("data") as? Bitmap
-            imageBitmap?.let { recognizeTextFromImage(it) }
+            if (imageBitmap != null) {
+                recognizeTextFromImage(imageBitmap)
+            } else {
+                resultMessage.value = "No se pudo obtener la imagen."
+            }
         }
     }
 
     private fun recognizeTextFromImage(bitmap: Bitmap) {
         lifecycleScope.launch {
-            val processedBitmap = withContext(Dispatchers.Default) { preprocessImage(bitmap) }
-            val recognizedText = withContext(Dispatchers.Default) { recognizeText(processedBitmap) }
-            resultMessage.text = recognizedText ?: "No se pudo reconocer el texto."
+            try {
+                val processedBitmap = withContext(Dispatchers.Default) { preprocessImage(bitmap) }
+                val recognizedText = withContext(Dispatchers.Default) { recognizeText(processedBitmap) }
+                resultMessage.value = recognizedText ?: "No se pudo reconocer el texto."
 
-            val customToastView = LinearLayout(this@CameraActivity).apply {
-                orientation = LinearLayout.HORIZONTAL
-                setPadding(16, 16, 16, 16)
-                setBackgroundColor(ContextCompat.getColor(this@CameraActivity, android.R.color.holo_blue_dark))
-            }
-
-            val imageView = ImageView(this@CameraActivity).apply {
-                layoutParams = LinearLayout.LayoutParams(50, 50).apply { // Set smaller size
-                    setMargins(0, 0, 16, 0)
+                val customToastView = LinearLayout(this@CameraActivity).apply {
+                    orientation = LinearLayout.HORIZONTAL
+                    setPadding(16, 16, 16, 16)
+                    setBackgroundColor(ContextCompat.getColor(this@CameraActivity, android.R.color.holo_blue_dark))
                 }
-                setImageResource(R.drawable.logo) // Replace with your logo resource
-            }
 
-            val textView = TextView(this@CameraActivity).apply {
-                layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
-                setTextColor(android.graphics.Color.WHITE)
-                text = if (recognizedText?.contains("avión", ignoreCase = true) == true) {
-                    rewardSystem.addPoints(10)
-                    "¡Palabra correcta! +10 puntos"
-                } else {
-                    "Palabra incorrecta"
+                val imageView = ImageView(this@CameraActivity).apply {
+                    layoutParams = LinearLayout.LayoutParams(50, 50).apply {
+                        setMargins(0, 0, 16, 0)
+                    }
+                    setImageResource(R.drawable.logo)
                 }
+
+                val textView = TextView(this@CameraActivity).apply {
+                    layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+                    setTextColor(android.graphics.Color.WHITE)
+                    text = if (recognizedText != null) {
+                        rewardSystem.addPoints(10)
+                        "¡Palabra correcta! +10 puntos"
+                    } else {
+                        "Palabra incorrecta o no enfocada. Inténtalo de nuevo."
+                    }
+                }
+
+                customToastView.addView(imageView)
+                customToastView.addView(textView)
+
+                Toast(this@CameraActivity).apply {
+                    duration = Toast.LENGTH_SHORT
+                    view = customToastView
+                }.show()
+
+                if (recognizedText != null) {
+                    showPointsAndRewards()
+                }
+            } catch (e: Exception) {
+                resultMessage.value = "Error al procesar la imagen: ${e.message}"
+                Log.e("CameraActivity", "Error al procesar la imagen", e)
             }
-
-            customToastView.addView(imageView)
-            customToastView.addView(textView)
-
-            Toast(this@CameraActivity).apply {
-                duration = Toast.LENGTH_SHORT
-                view = customToastView
-            }.show()
-
-            showPointsAndRewards()
         }
     }
 
     private fun showPointsAndRewards() {
-        val totalPoints = rewardSystem.getTotalPoints()
-        val availableRewards = rewardSystem.getAvailableRewards()
-
-        // Display points and rewards
-        resultMessage.text = "Puntos: $totalPoints\nRecompensas disponibles: ${availableRewards.joinToString { it.name }}"
+        // Implementa la lógica para mostrar los puntos y recompensas aquí
+        Toast.makeText(this, "Puntos y recompensas actualizados", Toast.LENGTH_SHORT).show()
     }
 
     private fun preprocessImage(bitmap: Bitmap): Bitmap {
-        val mat = Mat()
-        Utils.bitmapToMat(bitmap, mat)
+        return try {
+            val mat = Mat()
+            Utils.bitmapToMat(bitmap, mat)
 
-        Imgproc.cvtColor(mat, mat, Imgproc.COLOR_BGR2GRAY)
-        Imgproc.GaussianBlur(mat, mat, Size(5.0, 5.0), 0.0)
-        Imgproc.adaptiveThreshold(
-            mat, mat, 255.0,
-            Imgproc.ADAPTIVE_THRESH_GAUSSIAN_C,
-            Imgproc.THRESH_BINARY, 11, 2.0
-        )
+            Imgproc.cvtColor(mat, mat, Imgproc.COLOR_BGR2GRAY)
+            Imgproc.GaussianBlur(mat, mat, Size(5.0, 5.0), 0.0)
+            Imgproc.adaptiveThreshold(
+                mat, mat, 255.0,
+                Imgproc.ADAPTIVE_THRESH_GAUSSIAN_C,
+                Imgproc.THRESH_BINARY, 11, 2.0
+            )
 
-        val processedBitmap = Bitmap.createBitmap(mat.cols(), mat.rows(), Bitmap.Config.ARGB_8888)
-        Utils.matToBitmap(mat, processedBitmap)
-        return processedBitmap
+            val processedBitmap = Bitmap.createBitmap(mat.cols(), mat.rows(), Bitmap.Config.ARGB_8888)
+            Utils.matToBitmap(mat, processedBitmap)
+            processedBitmap
+        } catch (e: Exception) {
+            Log.e("CameraActivity", "Error en el procesamiento de la imagen", e)
+            bitmap
+        }
     }
 
-    private fun recognizeText(bitmap: Bitmap): String? {
-        // Implement a basic text recognition algorithm here
-        // For simplicity, this example returns a dummy text
-        return "avión"
+    private suspend fun recognizeText(bitmap: Bitmap): String? = suspendCancellableCoroutine { cont ->
+        val image = InputImage.fromBitmap(bitmap, 0)
+        val recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
+
+        recognizer.process(image)
+            .addOnSuccessListener { visionText ->
+                val recognizedText = visionText.text
+                if (recognizedText.contains("A V I O N", ignoreCase = true)) {
+                    cont.resume(recognizedText)
+                } else {
+                    cont.resume(null)
+                }
+            }
+            .addOnFailureListener { e ->
+                Log.e("CameraActivity", "Text recognition failed", e)
+                cont.resumeWithException(e)
+            }
+    }
+
+    @OptIn(ExperimentalMaterial3Api::class)
+    @Composable
+    fun CameraScreen(onOpenCamera: () -> Unit, resultMessage: MutableState<String>) {
+        Scaffold(
+            topBar = {
+                TopAppBar(
+                    title = {
+                        Text(text = "Camera Activity", color = Color.White)
+                    },
+                    colors = TopAppBarDefaults.topAppBarColors(containerColor = PrimaryColor)
+                )
+            }
+        ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(it)
+                    .background(MaterialTheme.colorScheme.background),
+                contentAlignment = Alignment.Center
+            ) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Button(onClick = onOpenCamera) {
+                        Text("Abrir Cámara")
+                    }
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Text(text = resultMessage.value, color = Color.Black)
+                }
+            }
+        }
     }
 }
