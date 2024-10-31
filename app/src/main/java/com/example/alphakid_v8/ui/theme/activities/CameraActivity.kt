@@ -12,12 +12,16 @@ import android.provider.MediaStore
 import android.util.Log
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
+import com.example.alphakid_v8.R
+import com.example.alphakid_v8.data.models.repositories.RewardSystem
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -30,6 +34,7 @@ import org.opencv.imgproc.Imgproc
 class CameraActivity : AppCompatActivity() {
 
     private lateinit var resultMessage: TextView
+    private val rewardSystem = RewardSystem()
     private val CAMERA_REQUEST_CODE = 100
 
     @RequiresApi(Build.VERSION_CODES.M)
@@ -110,12 +115,48 @@ class CameraActivity : AppCompatActivity() {
             val recognizedText = withContext(Dispatchers.Default) { recognizeText(processedBitmap) }
             resultMessage.text = recognizedText ?: "No se pudo reconocer el texto."
 
-            if (recognizedText?.contains("avión", ignoreCase = true) == true) {
-                Toast.makeText(this@CameraActivity, "¡Palabra correcta!", Toast.LENGTH_SHORT).show()
-            } else {
-                Toast.makeText(this@CameraActivity, "Palabra incorrecta", Toast.LENGTH_SHORT).show()
+            val customToastView = LinearLayout(this@CameraActivity).apply {
+                orientation = LinearLayout.HORIZONTAL
+                setPadding(16, 16, 16, 16)
+                setBackgroundColor(ContextCompat.getColor(this@CameraActivity, android.R.color.holo_blue_dark))
             }
+
+            val imageView = ImageView(this@CameraActivity).apply {
+                layoutParams = LinearLayout.LayoutParams(50, 50).apply { // Set smaller size
+                    setMargins(0, 0, 16, 0)
+                }
+                setImageResource(R.drawable.logo) // Replace with your logo resource
+            }
+
+            val textView = TextView(this@CameraActivity).apply {
+                layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+                setTextColor(android.graphics.Color.WHITE)
+                text = if (recognizedText?.contains("avión", ignoreCase = true) == true) {
+                    rewardSystem.addPoints(10)
+                    "¡Palabra correcta! +10 puntos"
+                } else {
+                    "Palabra incorrecta"
+                }
+            }
+
+            customToastView.addView(imageView)
+            customToastView.addView(textView)
+
+            Toast(this@CameraActivity).apply {
+                duration = Toast.LENGTH_SHORT
+                view = customToastView
+            }.show()
+
+            showPointsAndRewards()
         }
+    }
+
+    private fun showPointsAndRewards() {
+        val totalPoints = rewardSystem.getTotalPoints()
+        val availableRewards = rewardSystem.getAvailableRewards()
+
+        // Display points and rewards
+        resultMessage.text = "Puntos: $totalPoints\nRecompensas disponibles: ${availableRewards.joinToString { it.name }}"
     }
 
     private fun preprocessImage(bitmap: Bitmap): Bitmap {

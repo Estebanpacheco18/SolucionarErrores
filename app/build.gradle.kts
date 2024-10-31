@@ -57,6 +57,7 @@ android {
 }
 
 dependencies {
+    implementation("com.google.android.material:material:1.8.0")
     implementation(project(":opencv"))  // OpenCV as a module
     implementation("androidx.compose.ui:ui:1.6.0")
     implementation("androidx.compose.material3:material3:1.2.0")
