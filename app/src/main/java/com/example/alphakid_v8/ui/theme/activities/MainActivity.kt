@@ -1,4 +1,4 @@
-package com.example.alphakid_v8.ui.activities
+package com.example.alphakid_v8.ui.theme.activities
 
 import android.content.Context
 import android.content.Intent
@@ -17,7 +17,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.example.alphakid_v8.ui.theme.AlphaKid_v8Theme
-import com.example.alphakid_v8.ui.theme.activities.ChallengeActivity
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

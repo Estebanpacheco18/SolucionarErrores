@@ -12,7 +12,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.alphakid_v8.ui.activities.MainActivity
 import com.example.alphakid_v8.ui.theme.AlphaKid_v8Theme
 
 class NameRegistrationActivity : ComponentActivity() {
